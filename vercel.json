@@ -6,14 +6,17 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1.js" },
+
+    { "src": "/getcmd", "dest": "/api/getcmd.js" },
+    { "src": "/status", "dest": "/api/status.js" },
+
     { "src": "/on1", "dest": "/api/on1.js" },
     { "src": "/off1", "dest": "/api/off1.js" },
     { "src": "/on2", "dest": "/api/on2.js" },
     { "src": "/off2", "dest": "/api/off2.js" },
     { "src": "/set", "dest": "/api/set.js" },
     { "src": "/setmode", "dest": "/api/setmode.js" },
-    { "src": "/getcmd", "dest": "/api/getcmd.js" },
-    { "src": "/status", "dest": "/api/status.js" },
-    { "src": "/", "dest": "/public/index.html" }
+
+    { "src": "/(.*)", "dest": "/public/index.html" }
   ]
 }
