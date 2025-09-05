@@ -1,5 +1,5 @@
 // api/on2.js
-import store from "./_store";
+import store from "./_store.js";
 export default function handler(req, res) {
   store.command.lamp2 = 1;
   store.command.bright2 = 255;

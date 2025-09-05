@@ -1,7 +1,8 @@
 // api/getcmd.js
-import store from "./_store";
+import store from "./_store.js";
 
 export default function handler(req, res) {
+  // Trả về command hiện tại cho ESP32
   res.setHeader("Content-Type", "application/json");
-  return res.status(200).json(store.command);
+  res.status(200).json(store.command);
 }

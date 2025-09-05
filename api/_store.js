@@ -1,5 +1,5 @@
 // api/_store.js
-// shared in-memory store (simple)
+// Shared in-memory store — giữ nguyên logic cũ
 const store = {
   command: {
     mode: "manu",
@@ -15,7 +15,8 @@ const store = {
     bright2: 0,
     pir1: 0,
     pir2: 0,
-    lastSeen: null
+    lastSeen: null,
+    mode: "manu"
   }
 };
 

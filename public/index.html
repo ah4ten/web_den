@@ -1,4 +1,3 @@
-<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -64,14 +63,11 @@ async function setBrightness(lamp, value) {
 }
 
 async function updateUI() {
-  // lấy command
-  const cmdRes = await fetch('/getcmd');
+  const cmdRes = await fetch('/api/getcmd');
   const cmd = await cmdRes.json();
-  // lấy status
-  const stRes = await fetch('/status');
+  const stRes = await fetch('/api/status');
   const st = await stRes.json();
 
-  // Mode: bật/tắt layer disable (chỉ control bị disable, mode button vẫn dùng)
   if (cmd.mode === 'manu') {
     document.getElementById('manu').classList.remove('disabled-mode');
     document.getElementById('auto').classList.add('disabled-mode');
@@ -80,7 +76,6 @@ async function updateUI() {
     document.getElementById('manu').classList.add('disabled-mode');
   }
 
-  // States for MANU section
   document.getElementById('state1').innerText = cmd.lamp1 ? 'BẬT' : 'TẮT';
   document.getElementById('state2').innerText = cmd.lamp2 ? 'BẬT' : 'TẮT';
   document.getElementById('bright1').value = cmd.bright1;
@@ -88,7 +83,6 @@ async function updateUI() {
   document.getElementById('val1').innerText = cmd.bright1;
   document.getElementById('val2').innerText = cmd.bright2;
 
-  // States for AUTO section from status
   document.getElementById('pir1').innerText = st.pir1 ? 'BẬT' : 'TẮT';
   document.getElementById('pir2').innerText = st.pir2 ? 'BẬT' : 'TẮT';
   document.getElementById('state1_a').innerText = st.lamp1 ? 'BẬT' : 'TẮT';

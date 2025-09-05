@@ -1,14 +1,11 @@
-// api/set.js
+// api/setbright.js
 import store from "./_store.js";
 
 export default function handler(req, res) {
-  // Hỗ trợ GET query hoặc POST JSON
   const lamp = req.query?.lamp ?? (req.method === "POST" ? req.body?.lamp : undefined);
   const value = req.query?.value ?? (req.method === "POST" ? req.body?.value : undefined);
 
-  if (!lamp || value === undefined) {
-    return res.status(400).send("Missing parameter");
-  }
+  if (!lamp || value === undefined) return res.status(400).send("Missing parameter");
 
   const l = parseInt(lamp);
   const v = Math.max(0, Math.min(255, parseInt(value)));
@@ -17,5 +14,5 @@ export default function handler(req, res) {
   else if (l === 2) store.command.bright2 = v;
   else return res.status(400).send("Invalid lamp");
 
-  return res.status(200).send("OK");
+  return res.status(200).json({ message: "brightness updated", command: store.command });
 }
