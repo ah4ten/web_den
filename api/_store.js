@@ -1,5 +1,5 @@
 // api/_store.js
-// simple shared memory store for serverless instance lifecycle
+// shared in-memory store (simple)
 const store = {
   command: {
     mode: "manu",
