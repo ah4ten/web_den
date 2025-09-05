@@ -6,7 +6,6 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1.js" },
-    // map the original endpoints at root to API functions
     { "src": "/on1", "dest": "/api/on1.js" },
     { "src": "/off1", "dest": "/api/off1.js" },
     { "src": "/on2", "dest": "/api/on2.js" },
