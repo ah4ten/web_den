@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Điều khiển chiếu sáng</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; background:#eef; margin:0; padding:0; text-align:center;}
+    h1 { background:#004080; color:white; margin:0; padding:15px;}
+    .container { display:flex; height:calc(100vh - 80px);}
+    .column { flex:1; padding:20px;}
+    .divider { width:3px; background:#333;}
+    button {
+      width:120px; height:50px; margin:10px; border:none;
+      border-radius:10px; font-size:16px; cursor:pointer;
+    }
+    .disabled { opacity:0.4; pointer-events:none; }
+    .slider { width:80%; }
+  </style>
+</head>
+<body>
+  <h1>Hệ thống chiếu sáng hành lang</h1>
+  <div class="container">
+    <div class="column" id="manu">
+      <h2>Chế độ MANU</h2>
+      <button onclick="setMode('manu')">Bật MANU</button><br>
+      <button id="lamp1Btn" onclick="toggleLamp(1)">Đèn 1</button>
+      <input type="range" min="0" max="255" value="255" class="slider" id="bright1" onchange="setBrightness(1)">
+      <br>
+      <button id="lamp2Btn" onclick="toggleLamp(2)">Đèn 2</button>
+      <input type="range" min="0" max="255" value="255" class="slider" id="bright2" onchange="setBrightness(2)">
+    </div>
+    <div class="divider"></div>
+    <div class="column" id="auto">
+      <h2>Chế độ AUTO</h2>
+      <button onclick="setMode('auto')">Bật AUTO</button>
+      <p>Đèn tự sáng khi PIR phát hiện chuyển động.</p>
+    </div>
+  </div>
+
+  <script>
+    const apiCmd = "/api/cmd";
+    const apiStatus = "/api/status";
+
+    async function setMode(mode) {
+      await fetch(apiCmd, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mode, lamp1:0, lamp2:0 })
+      });
+      updateUI();
+    }
+
+    async function toggleLamp(id) {
+      const res = await fetch(apiCmd);
+      const cmd = await res.json();
+      const newState = cmd[`lamp${id}`] ? 0 : 1;
+      await fetch(apiCmd, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [`lamp${id}`]: newState })
+      });
+      updateUI();
+    }
+
+    async function setBrightness(id) {
+      const val = document.getElementById(`bright${id}`).value;
+      await fetch(apiCmd, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [`bright${id}`]: parseInt(val) })
+      });
+    }
+
+    async function updateUI() {
+      const res = await fetch(apiCmd);
+      const cmd = await res.json();
+      if (cmd.mode === "manu") {
+        document.getElementById("manu").classList.remove("disabled");
+        document.getElementById("auto").classList.add("disabled");
+      } else {
+        document.getElementById("auto").classList.remove("disabled");
+        document.getElementById("manu").classList.add("disabled");
+      }
+      document.getElementById("lamp1Btn").innerText = cmd.lamp1 ? "Đèn 1 ON" : "Đèn 1 OFF";
+      document.getElementById("lamp2Btn").innerText = cmd.lamp2 ? "Đèn 2 ON" : "Đèn 2 OFF";
+      document.getElementById("bright1").value = cmd.bright1;
+      document.getElementById("bright2").value = cmd.bright2;
+    }
+
+    setInterval(updateUI, 2000);
+    updateUI();
+  </script>
+</body>
+</html>
